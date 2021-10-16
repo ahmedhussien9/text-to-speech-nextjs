@@ -1,0 +1,31 @@
+{
+  "name": "rt-fistudio",
+  "version": "1.0.0",
+  "description": "A demo website for the React &amp; Next.js guide",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start",
+    "export": "next build && next export -o public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://kheruc@github.com/kheruc/rt-fistudio.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kheruc/rt-fistudio/issues"
+  },
+  "homepage": "https://github.com/kheruc/rt-fistudio#readme",
+  "dependencies": {
+    "next": "^9.5.5",
+    "react": "^16.14.0",
+    "react-dom": "^16.14.0",
+    "react-slick": "^0.28.1",
+    "font-awesome": "^4.7.0",
+    "react-bootstrap-range-slider": "^3.0.2"
+  }
+}
