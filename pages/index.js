@@ -58,14 +58,13 @@ function Homepage() {
     >
       <div className="container">
         <h1 className="title">
-          <span className="highlightText">Speech Synthesis API </span>  
+          <span className="highlightText">Speech Synthesis API </span>
           <i className="fa fa-microphone"></i>
         </h1>
         <p className="description">
-          The Web Speech API provides two distinct areas of functionality —
-          speech recognition, and speech synthesis (also known as text to
-          speech, or tts) — which open up interesting new possibilities for
-          accessibility, and control mechanisms.
+          Speech synthesis (TTS) is defined as the artificial production of
+          human voices. The main use (and what induced its creation) is the
+          ability to translate a text into spoken speech automatically.
         </p>
         <a
           className="link"
