@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { NextSeo } from 'next-seo';
+import { NextSeo } from "next-seo";
 
 const Layout = (props) => (
   <div className="site-wrapper">
@@ -7,33 +7,33 @@ const Layout = (props) => (
       title={props.title ? `${props.title} ` : ""}
       description={props.description ? `${props.description} ` : ""}
       openGraph={{
-        url: 'https://www.url.ie/a',
-        title: 'Open Graph Title',
-        description: 'Open Graph Description',
+        url: "https://www.url.ie/a",
+        title: props.title,
+        description: props.description,
         images: [
           {
-            url: '/static/site-image.png',
+            url: "/static/site-image.png",
             width: 800,
             height: 600,
-            alt: 'Og Image Alt',
-            type: 'image/jpeg',
+            alt: "Og Image Alt",
+            type: "image/jpeg",
           },
           {
-            url: '/static/site-image.png',
+            url: "/static/site-image.png",
             width: 900,
             height: 800,
-            alt: 'Og Image Alt Second',
-            type: 'image/jpeg',
+            alt: "Og Image Alt Second",
+            type: "image/jpeg",
           },
-          { url: '/static/site-image.png' },
-          { url: '/static/site-image.png' },
+          { url: "/static/site-image.png" },
+          { url: "/static/site-image.png" },
         ],
-        site_name: 'Ahmed Khattab',
+        site_name: "Ahmed Khattab",
       }}
       twitter={{
-        handle: '@handle',
-        site: '@site',
-        cardType: 'summary_large_image',
+        handle: "@handle",
+        site: "@site",
+        cardType: "summary_large_image",
       }}
     />
 
