@@ -75,9 +75,9 @@ function Homepage() {
         </a>
 
         {!supported && (
-          <p>
+          <p className="notSupported">
             Oh no, it looks like your browser doesn&#39;t support Speech
-            Synthesis.
+            Synthesis <i className="fa fa-ban banIcon" aria-hidden="true"></i>
           </p>
         )}
         {supported && (
@@ -356,6 +356,19 @@ function Homepage() {
         .playButtonContainer {
           display: flex;
           justify-content: center;
+        }
+
+        .notSupported {
+          height: 70px;
+          color: #007bff;
+          display: flex;
+          justify-content: center;
+          font-weight: bold;
+          align-items: center;
+        }
+        .banIcon{
+          margin-left: 5px;
+          font-size: 25px;
         }
         .speechButton {
           border: none;
