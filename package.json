@@ -21,11 +21,12 @@
   },
   "homepage": "https://github.com/kheruc/rt-fistudio#readme",
   "dependencies": {
-    "next": "^9.5.5",
-    "react": "^16.14.0",
-    "react-dom": "^16.14.0",
-    "react-slick": "^0.28.1",
     "font-awesome": "^4.7.0",
-    "react-bootstrap-range-slider": "^3.0.2"
+    "next": "^9.5.5",
+    "next-seo": "^4.28.1",
+    "react": "^16.14.0",
+    "react-bootstrap-range-slider": "^3.0.2",
+    "react-dom": "^16.14.0",
+    "react-slick": "^0.28.1"
   }
 }

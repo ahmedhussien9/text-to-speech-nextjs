@@ -1,28 +1,41 @@
 import Head from "next/head";
+import { NextSeo } from 'next-seo';
 
 const Layout = (props) => (
   <div className="site-wrapper">
-    <Head>
-      <title>{props.title ? `${props.title} ` : ""}</title>
-      {props.description ? (
-        <meta name="description" content={props.description} />
-      ) : null}
-
-      <meta
-        property="og:image"
-        content="/static/site-image.png"
-        key="ogimage"
-      />
-      <meta property="og:site_name" content="Ahmed Khattab" key="ogsitename" />
-      <meta property="og:title" content="props.title" key="ogtitle" />
-      <meta
-        property="og:description"
-        content={props.description}
-        key="ogdesc"
-      />
-    </Head>
-
-    {/* <Header /> */}
+    <NextSeo
+      title={props.title ? `${props.title} ` : ""}
+      description={props.description ? `${props.description} ` : ""}
+      openGraph={{
+        url: 'https://www.url.ie/a',
+        title: 'Open Graph Title',
+        description: 'Open Graph Description',
+        images: [
+          {
+            url: '/static/site-image.png',
+            width: 800,
+            height: 600,
+            alt: 'Og Image Alt',
+            type: 'image/jpeg',
+          },
+          {
+            url: '/static/site-image.png',
+            width: 900,
+            height: 800,
+            alt: 'Og Image Alt Second',
+            type: 'image/jpeg',
+          },
+          { url: '/static/site-image.png' },
+          { url: '/static/site-image.png' },
+        ],
+        site_name: 'Ahmed Khattab',
+      }}
+      twitter={{
+        handle: '@handle',
+        site: '@site',
+        cardType: 'summary_large_image',
+      }}
+    />
 
     <div className="layout">{props.children}</div>
     <footer>
