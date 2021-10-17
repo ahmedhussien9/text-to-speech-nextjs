@@ -3,6 +3,7 @@ import Layout from "../components/Layout";
 import "font-awesome/css/font-awesome.min.css";
 import "react-bootstrap-range-slider/dist/react-bootstrap-range-slider.css";
 import RangeSlider from "react-bootstrap-range-slider";
+import useSpeechSynthesis from "../helper/speech";
 
 function Homepage() {
   const STEP = 0.1;
@@ -11,101 +12,41 @@ function Homepage() {
   const MAX_PITCH = 2;
   const MAX_RATE = 10;
 
-  const [message, setMessage] = useState("");
-  const [voices, setVoices] = useState([]);
-  const [voiceCode, setVoiceCode] = useState("en-US");
   const [volume, setVolume] = useState(0.5);
-  const [pitch, setPitch] = useState(1);
   const [rate, setRate] = useState(1);
-  const [isPaused, setIsPaused] = useState(false);
-  const [isSpeaking, setSpeaking] = useState(false);
-  const [supported, setSupported] = useState(false);
-
-  const getVoices = () => {
-    let voiceOptions = window.speechSynthesis.getVoices();
-    if (voiceOptions.length > 0) {
-      processVoices(voiceOptions);
-      return;
-    }
-
-    window.speechSynthesis.onvoiceschanged = (event) => {
-      voiceOptions = event.target.getVoices();
-      processVoices(voiceOptions);
-    };
+  const [text, setText] = useState("I am a robot");
+  const [pitch, setPitch] = useState(1);
+  const [voiceIndex, setVoiceIndex] = useState(null);
+  const onEnd = () => {
+    // You could do something here after speaking has finished
   };
-
-  const processVoices = (voiceOptions) => {
-    setVoices(voiceOptions);
-  };
-
-  const resumeSpeaking = () => {
-    window.speechSynthesis.resume();
-  };
-
-  const pauseSpeaking = () => {
-    window.speechSynthesis.pause();
-  };
-
-  useEffect(() => {
-    if (typeof window !== "undefined" && window.speechSynthesis) {
-      setSupported(true);
-      getVoices();
-    }
-  }, []);
-
-  const sendMessage = (message) => {
-    setMessage(message);
-  };
-
-  const onChangeVoice = (voice) => {
-    setVoiceCode(voice);
-  };
-
-  const speak = () => {
-    const speech = new SpeechSynthesisUtterance();
-    // Handle pause speaking
-    if (!supported) return;
-    if (isSpeaking && !isPaused) {
-      pauseSpeaking();
-      setIsPaused(true);
-      return;
-    }
-    // Handle resume speaking again
-    if (isSpeaking && isPaused) {
-      resumeSpeaking();
-      setIsPaused(false);
-      return;
-    }
-    // Speaking for first time
-    speech.lang = voiceCode;
-    speech.text = message;
-    speech.volume = volume;
-    speech.rate = rate;
-    speech.pitch = pitch;
-    speech.onstart = () => {
-      setSpeaking(true);
-    };
-    speech.onend = () => {
-      setSpeaking(false);
-    };
-    window.speechSynthesis.speak(speech);
-  };
+  const { speak, cancel, speaking, supported, voices } = useSpeechSynthesis({
+    onEnd,
+  });
+  const voice = voices[voiceIndex] || null;
 
   const changePlayAndPauseIcon = () => {
-    if (isPaused) {
-      return <i className="fa fa-play" aria-hidden="true"></i>;
-    }
-
-    if (isSpeaking) {
+    if (speaking) {
       return (
         <div>
-          <i className="fa fa-pause" aria-hidden="true"></i>
-          <div className="pulseRing"></div>
+          <button onClick={cancel} className="speechButton">
+            <i className="fa fa-pause" aria-hidden="true"></i>
+            <div className="pulseRing"></div>
+          </button>
         </div>
       );
     }
 
-    return <i className="fa fa-play" aria-hidden="true"></i>;
+    return (
+      <div>
+        <button
+          onClick={() => speak({ text, voice, rate, pitch })}
+          className="speechButton"
+        >
+          <i className="fa fa-play" aria-hidden="true"></i>
+        </button>
+      </div>
+    );
   };
 
   return (
@@ -134,109 +75,113 @@ function Homepage() {
         >
           Read More
         </a>
-        {/* Voice Animation bar*/}
-        <div className="barArea">
-          {isPaused ? (
-            <div className="stoppedArea">
-              <h6 className="stoppedAreaTitle">Stopped</h6>
-            </div>
-          ) : (
-            ""
-          )}
-          {isSpeaking && !isPaused ? (
-            <div className="barContainer">
-              <div className="bar"></div>
-              <div className="bar"></div>
-              <div className="bar"></div>
-              <div className="bar"></div>
-              <div className="bar"></div>
-              <div className="bar"></div>
-              <div className="bar"></div>
-              <div className="bar"></div>
-              <div className="bar"></div>
-              <div className="bar"></div>
-              <div className="bar"></div>
-              <div className="bar"></div>
-            </div>
-          ) : (
-            ""
-          )}
-        </div>
 
-        <div className="voiceControlsContainer">
-          <div className="voiceVolumeContainer">
-            <h6 className="controlLabel">Volume</h6>
-            <RangeSlider
-              min={MIN}
-              max={MAX_VOLUME}
-              value={volume}
-              step={STEP}
-              variant="primary"
-              onChange={(changeEvent) => setVolume(changeEvent.target.value)}
-            />
-          </div>
-          <div className="voiceVolumeContainer">
-            <h6 className="controlLabel">Pitch</h6>
-            <RangeSlider
-              min={MIN}
-              max={MAX_PITCH}
-              value={pitch}
-              step={STEP}
-              variant="primary"
-              onChange={(changeEvent) => setPitch(changeEvent.target.value)}
-            />
-          </div>
-          <div className="voiceVolumeContainer">
-            <h6 className="controlLabel">Rate</h6>
-            <RangeSlider
-              min={1}
-              max={MAX_RATE}
-              value={rate}
-              step={STEP}
-              variant="primary"
-              onChange={(changeEvent) => setRate(changeEvent.target.value)}
-            />
-          </div>
-        </div>
-        <div className="speechContainer">
-          {voices && voices.length ? (
-            <div className="languageContainer">
-              <h6 className="controlLabel">Select Language</h6>
-              <select
-                className="select"
-                onChange={(event) => onChangeVoice(event.target.value)}
-              >
-                {voices &&
-                  voices.length > 0 &&
-                  voices.map((voice, key) => {
-                    return (
-                      <option key={key} value={voice.lang}>
-                        {voice.name}
-                      </option>
-                    );
-                  })}
-              </select>
+        {!supported && (
+          <p>
+            Oh no, it looks like your browser doesn&#39;t support Speech
+            Synthesis.
+          </p>
+        )}
+        {supported && (
+          <React.Fragment>
+            <div className="barArea">
+              {speaking ? (
+                <div className="barContainer">
+                  <div className="bar"></div>
+                  <div className="bar"></div>
+                  <div className="bar"></div>
+                  <div className="bar"></div>
+                  <div className="bar"></div>
+                  <div className="bar"></div>
+                  <div className="bar"></div>
+                  <div className="bar"></div>
+                  <div className="bar"></div>
+                  <div className="bar"></div>
+                  <div className="bar"></div>
+                  <div className="bar"></div>
+                </div>
+              ) : (
+                ""
+              )}
             </div>
-          ) : (
-            ""
-          )}
 
-          <textarea
-            className="textArea"
-            name="message"
-            rows="8"
-            placeholder="Please write something here and click on play button.."
-            column="5"
-            onChange={(event) => sendMessage(event.target.value)}
-          ></textarea>
+            <div className="voiceControlsContainer">
+              <div className="voiceVolumeContainer">
+                <h6 className="controlLabel">Volume</h6>
+                <RangeSlider
+                  min={MIN}
+                  max={MAX_VOLUME}
+                  value={volume}
+                  step={STEP}
+                  variant="primary"
+                  onChange={(changeEvent) =>
+                    setVolume(changeEvent.target.value)
+                  }
+                />
+              </div>
+              <div className="voiceVolumeContainer">
+                <h6 className="controlLabel">Pitch</h6>
+                <RangeSlider
+                  min={MIN}
+                  max={MAX_PITCH}
+                  value={pitch}
+                  step={STEP}
+                  variant="primary"
+                  onChange={(changeEvent) => setPitch(changeEvent.target.value)}
+                />
+              </div>
+              <div className="voiceVolumeContainer">
+                <h6 className="controlLabel">Rate</h6>
+                <RangeSlider
+                  min={1}
+                  max={MAX_RATE}
+                  value={rate}
+                  step={STEP}
+                  variant="primary"
+                  onChange={(changeEvent) => setRate(changeEvent.target.value)}
+                />
+              </div>
+            </div>
+            <div className="speechContainer">
+              {voices && voices.length ? (
+                <div className="languageContainer">
+                  <h6 className="controlLabel">Select Language</h6>
+                  <select
+                    className="select"
+                    onChange={(event) => setVoiceIndex(event.target.value)}
+                  >
+                    {voices &&
+                      voices.length > 0 &&
+                      voices.map((voice, key) => {
+                        return (
+                          <option key={key} value={voice.lang}>
+                            {voice.name}
+                          </option>
+                        );
+                      })}
+                  </select>
+                </div>
+              ) : (
+                ""
+              )}
 
-          <div className="playButtonContainer">
-            <button onClick={speak} className="speechButton">
-              {changePlayAndPauseIcon()}
-            </button>
-          </div>
-        </div>
-        {/* End Voice List & text */}
+              <textarea
+                className="textArea"
+                name="message"
+                rows="8"
+                placeholder="Please write something here and click on play button.."
+                column="5"
+                value={text}
+                onChange={(event) => setText(event.target.value)}
+              ></textarea>
+
+              <div className="playButtonContainer">
+                {changePlayAndPauseIcon()}
+              </div>
+            </div>
+            {/* End Voice List & text */}
+          </React.Fragment>
+        )}
       </div>
 
       <style jsx global>{`
