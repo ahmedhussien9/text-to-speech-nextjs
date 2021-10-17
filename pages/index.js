@@ -19,9 +19,52 @@ function Homepage() {
   const [rate, setRate] = useState(1);
   const [isPaused, setIsPaused] = useState(false);
   const [isSpeaking, setSpeaking] = useState(false);
+  const [supported, setSupported] = useState(false);
+
+  const getVoices = () => {
+    let voiceOptions = window.speechSynthesis.getVoices();
+    if (voiceOptions.length > 0) {
+      processVoices(voiceOptions);
+      return;
+    }
+
+    window.speechSynthesis.onvoiceschanged = (event) => {
+      voiceOptions = event.target.getVoices();
+      processVoices(voiceOptions);
+    };
+  };
+
+  const processVoices = (voiceOptions) => {
+    setVoices(voiceOptions);
+  };
+
+  const resumeSpeaking = () => {
+    window.speechSynthesis.resume();
+  };
+
+  const pauseSpeaking = () => {
+    window.speechSynthesis.pause();
+  };
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.speechSynthesis) {
+      setSupported(true);
+      getVoices();
+    }
+  }, []);
+
+  const sendMessage = (message) => {
+    setMessage(message);
+  };
+
+  const onChangeVoice = (voice) => {
+    setVoiceCode(voice);
+  };
+
   const speak = () => {
     const speech = new SpeechSynthesisUtterance();
     // Handle pause speaking
+    if (!supported) return;
     if (isSpeaking && !isPaused) {
       pauseSpeaking();
       setIsPaused(true);
@@ -39,25 +82,14 @@ function Homepage() {
     speech.volume = volume;
     speech.rate = rate;
     speech.pitch = pitch;
-    speech.onstart = function () {
+    speech.onstart = () => {
       setSpeaking(true);
     };
-    speech.onend = function () {
+    speech.onend = () => {
       setSpeaking(false);
     };
-    console.log(speech);
     window.speechSynthesis.speak(speech);
   };
-
-  const resumeSpeaking = () => {
-    window.speechSynthesis.resume();
-  };
-
-  const pauseSpeaking = () => {
-    window.speechSynthesis.pause();
-  };
-
-  const turnOnSpeaking = (speech) => {};
 
   const changePlayAndPauseIcon = () => {
     if (isPaused) {
@@ -74,21 +106,6 @@ function Homepage() {
     }
 
     return <i className="fa fa-play" aria-hidden="true"></i>;
-  };
-
-  useEffect(() => {
-    const voicesList = window.speechSynthesis.getVoices();
-    console.log(voicesList);
-    setVoices(voicesList);
-  }, []);
-
-  const sendMessage = (message) => {
-    setMessage(message);
-  };
-
-  const onChangeVoice = (voice) => {
-    console.log(voice);
-    setVoiceCode(voice);
   };
 
   return (
