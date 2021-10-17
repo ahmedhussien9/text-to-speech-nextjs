@@ -1,15 +1,25 @@
 import Head from "next/head";
-import Header from "../components/Header";
 
 const Layout = (props) => (
   <div className="site-wrapper">
     <Head>
-      <title>
-        {props.title ? `${props.title} ` : ""}
-      </title>
+      <title>{props.title ? `${props.title} ` : ""}</title>
       {props.description ? (
         <meta name="description" content={props.description} />
       ) : null}
+
+      <meta
+        property="og:image"
+        content="/static/site-image.png"
+        key="ogimage"
+      />
+      <meta property="og:site_name" content="Ahmed Khattab" key="ogsitename" />
+      <meta property="og:title" content="props.title" key="ogtitle" />
+      <meta
+        property="og:description"
+        content={props.description}
+        key="ogdesc"
+      />
     </Head>
 
     {/* <Header /> */}
