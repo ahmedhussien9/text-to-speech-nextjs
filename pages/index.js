@@ -12,7 +12,7 @@ function Homepage() {
   const MAX_PITCH = 2;
   const MAX_RATE = 10;
 
-  const [volume, setVolume] = useState(0.5);
+  const [volume, setVolume] = useState(1);
   const [rate, setRate] = useState(1);
   const [text, setText] = useState("I am a robot");
   const [pitch, setPitch] = useState(1);
@@ -40,7 +40,7 @@ function Homepage() {
     return (
       <div>
         <button
-          onClick={() => speak({ text, voice, rate, pitch })}
+          onClick={() => speak({ text, voice, rate, pitch, volume })}
           className="speechButton"
         >
           <i className="fa fa-play" aria-hidden="true"></i>

@@ -6,7 +6,7 @@ const useSpeechSynthesis = (props = {}) => {
   const [voices, setVoices] = useState([]);
   const [speaking, setSpeaking] = useState(false);
   const [supported, setSupported] = useState(false);
-
+  
   const processVoices = (voiceOptions) => {
     setVoices(voiceOptions);
   };
