@@ -58,8 +58,7 @@ function Homepage() {
     >
       <div className="container">
         <h1 className="title">
-          Text to Speech using{" "}
-          <span className="highlightText">Web Speech API</span> in JavaScript{" "}
+          <span className="highlightText">Speech Synthesis API </span>  
           <i className="fa fa-microphone"></i>
         </h1>
         <p className="description">
@@ -70,7 +69,7 @@ function Homepage() {
         </p>
         <a
           className="link"
-          href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API/Using_the_Web_Speech_API"
+          href="https://developer.mozilla.org/en-US/docs/Web/API/SpeechSynthesis"
           target="_blank"
         >
           Read More
@@ -145,7 +144,7 @@ function Homepage() {
             <div className="speechContainer">
               {voices && voices.length ? (
                 <div className="languageContainer">
-                  <h6 className="controlLabel">Select Language</h6>
+                  <h6 className="controlLabel">Voice</h6>
                   <select
                     className="select"
                     onChange={(event) => setVoiceIndex(event.target.value)}
@@ -186,14 +185,14 @@ function Homepage() {
 
       <style jsx global>{`
         .container {
-          min-height: 100vh;
+          min-height: 80vh;
           padding: 3rem 1rem;
           position: relative;
           border: 1px solid #f1f1f1;
         }
         .title {
           color: #fff;
-          font-size: 35px;
+          font-size: 40px;
         }
         .description {
           color: #fff;
